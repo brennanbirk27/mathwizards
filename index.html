@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utility Portal</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #121212;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .toolbar {
+            background: #1f1f1f;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid #333;
+        }
+        input {
+            flex: 1;
+            padding: 8px 12px;
+            background: #2d2d2d;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 4px;
+            outline: none;
+        }
+        button {
+            padding: 8px 16px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover { background: #0052a3; }
+        iframe {
+            flex: 1;
+            border: none;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="toolbar">
+            <input type="text" id="urlInput" placeholder="Enter URL (e.g., https://example.com)" />
+            <button onclick="loadSite()">Go</button>
+        </div>
+        <iframe id="proxyFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+    </div>
+
+    <script>
+        function loadSite() {
+            let url = document.getElementById('urlInput').value;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            // Note: Websites that send X-Frame-Options headers will block direct iframe embedding.
+            // For a more advanced backend-less proxy engine later, look into open-source static WISP/Ultraviolet templates.
+            document.getElementById('proxyFrame').src = url;
+        }
+
+        // Allow pressing 'Enter' to submit
+        document.getElementById('urlInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') { loadSite(); }
+        });
+    </script>
+</body>
+</html>
